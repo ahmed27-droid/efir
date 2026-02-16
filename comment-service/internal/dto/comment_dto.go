@@ -7,5 +7,5 @@ type CreateCommentDTO struct {
 }
 
 type UpdateCommentDTO struct {
-	Content *string `json:"content" binding:"required,min=5,max=1000"`
+	Content *string `json:"content" binding:"omitempty,min=5,max=1000"`
 }
