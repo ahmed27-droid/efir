@@ -12,7 +12,7 @@ const (
 
 type User struct {
 	gorm.Model
-	Email        string `gorm:"type:varchar(28);uniqueIndex;not null"`
+	Email        string `gorm:"type:varchar(50);uniqueIndex;not null"`
 	Username     string `gorm:"type:varchar(20);not null"`
 	PasswordHash string `gorm:"type:varchar(200);not null"`
 	FirstName    string `gorm:"type:varchar(22);not null"`
@@ -25,12 +25,12 @@ type CreateUserRequest struct {
 	Email     string	`json:"email" validate:"required,email"`
 	Username  string	`json:"username" validate:"required,min=3,max=20"`
 	Password  string	`json:"password" validate:"required,min=6,max=23"`
-	FirstName string	`json:"first_name" validate:"required, min=4,max=14"`
+	FirstName string	`json:"first_name" validate:"required,min=4,max=14"`
 	LastName  string	`json:"last_name" validate:"required,min=3,max=12"`
 }
 
 type UpdateUserRequest struct {
-	FirstName string	`json:"email"`
+	FirstName string	`json:"first_name"`
 	LastName  string	`json:"last_name"`
 	Username  string	`json:"username"`
 }
