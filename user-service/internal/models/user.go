@@ -13,7 +13,7 @@ const (
 type User struct {
 	gorm.Model
 	Email        string `gorm:"type:varchar(50);uniqueIndex;not null"`
-	Username     string `gorm:"type:varchar(20);not null"`
+	Username     string `gorm:"type:varchar(20);uniqueIndex;not null"`
 	PasswordHash string `gorm:"type:varchar(200);not null"`
 	FirstName    string `gorm:"type:varchar(22);not null"`
 	LastName     string `gorm:"type:varchar(22);not null"`
