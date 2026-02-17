@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"user/internal/errs"
 	"user/internal/models"
 
@@ -65,7 +66,7 @@ func (r *userRepository) GetByUsername(username string) (*models.User, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errs.ErrUserNotFound
 		}
-		 return nil, err
+		return nil, err
 	}
 	return &user, nil
 }
@@ -77,7 +78,7 @@ func (r *userRepository) ExistsByEmail(email string) (bool, error) {
 
 	if err != nil {
 
-		return false, errs.ErrCheckEmailExists
+		return false, fmt.Errorf("%w: %v", errs.ErrCheckEmailExists, err)
 	}
 
 	return count > 0, nil
@@ -90,8 +91,9 @@ func (r *userRepository) ExistsByUsername(username string) (bool, error) {
 
 	if err != nil {
 
-		return false, errs.ErrCheckUsernameExists
+		return false, fmt.Errorf("%w: %v", errs.ErrCheckUsernameExists, err)
 	}
+	
 
 	return count > 0, nil
 }
