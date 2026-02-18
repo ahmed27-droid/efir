@@ -22,8 +22,5 @@ func DatabaseConnect() *gorm.DB {
 		os.Exit(1)
 	}
 
-	if err :=db.AutoMigrate(); err != nil{
-		os.Exit(1)
-	}
 	return db
 }
