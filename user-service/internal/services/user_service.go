@@ -54,7 +54,7 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	}
 
 	if usernameExists {
-		return nil, errs.ErrCheckUsernameExists
+		return nil, errs.ErrUsernameAlreadyExists
 	}
 
 	hashedPassword, err := auth.HashPassword(req.Password)
