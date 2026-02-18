@@ -12,12 +12,11 @@ const (
 
 type User struct {
 	gorm.Model
-	Email        string `gorm:"type:varchar(50);uniqueIndex;not null"`
-	Username     string `gorm:"type:varchar(20);uniqueIndex;not null"`
-	PasswordHash string `gorm:"type:varchar(200);not null"`
-	FirstName    string `gorm:"type:varchar(22);not null"`
-	LastName     string `gorm:"type:varchar(22);not null"`
-	Role         Role   `gorm:"type:varchar(20);default:'reader';not null"`
-	IsActive     bool   `gorm:"default:true"`
+	Email     string `json:"full_name" gorm:"type:varchar(50);uniqueIndex;not null"`
+	Username  string `json:"username" gorm:"type:varchar(20);uniqueIndex;not null"`
+	Password  string `json:"-" gorm:"type:varchar(200);not null"`
+	FirstName string `json:"first_name" gorm:"type:varchar(22);not null"`
+	LastName  string `json:"last_name" gorm:"type:varchar(22);not null"`
+	Role      Role   `json:"role" gorm:"type:varchar(20);default:'reader';not null"`
+	IsActive  bool   `json:"is_active" gorm:"default:true"`
 }
-
