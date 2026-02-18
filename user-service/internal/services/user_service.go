@@ -34,7 +34,7 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	lastname := strings.TrimSpace(req.LastName)
 
 	if err := auth.ValidatePassword(req.Password); err != nil {
-		return nil, errs.ErrInvalidPassword
+		return nil, err
 	}
 
 	emailExists, err := s.userRepo.ExistsByEmail(email)
@@ -44,7 +44,7 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	}
 
 	if emailExists {
-		return nil, errs.ErrCheckEmailExists
+		return nil, errs.ErrEmailAlreadyExists
 	}
 
 	usernameExists, err := s.userRepo.ExistsByUsername(username)
