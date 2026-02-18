@@ -18,7 +18,20 @@ func AuthMiddleware() gin.HandlerFunc {
 			return 
 		}
 
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token format"})
+			return
+		}
+
+
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		tokenString = strings.TrimSpace(tokenString)
+
+		if tokenString == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error":"empty token"})
+		}
+
+
 
 		claims, err := auth.ValidateAccessToken(tokenString)
 		if err != nil {
