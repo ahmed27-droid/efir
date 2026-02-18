@@ -8,5 +8,8 @@ import (
 
 type UserService interface {
 	Register(req dto.RegisterRequest) (*models.User, error)
-	
-}
+	Login(req dto.LoginRequest) (string, error)
+
+} 
+
+type 

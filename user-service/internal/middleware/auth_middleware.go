@@ -29,6 +29,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if tokenString == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error":"empty token"})
+			return 
 		}
 
 
