@@ -5,11 +5,11 @@ import "gorm.io/gorm"
 type ReactionType string
 
 const (
-	ReactionLike  ReactionType = "like"
-	ReactionFire  ReactionType = "fire"
-	ReactionShock ReactionType = "shock"
-	ReactionSad   ReactionType = "sad"
-	ReactionLaugh ReactionType = "laugh"
+	Like  ReactionType = "like"
+	Fire  ReactionType = "fire"
+	Shock ReactionType = "shock"
+	Sad   ReactionType = "sad"
+	Laugh ReactionType = "laugh"
 )
 
 type Reaction struct {

@@ -31,6 +31,8 @@ func (c *RedisCache) IsActive(postID uint) (bool, bool) {
 	if err == redis.Nil {
 		return false, false
 	}
+	
+
 	if err != nil {
 		return false, false
 	}
@@ -39,7 +41,8 @@ func (c *RedisCache) IsActive(postID uint) (bool, bool) {
 
 func (c *RedisCache) SetInActive(postID uint) {
 	ctx := context.Background()
-	c.rdb.Set(ctx, key(postID), "0", 24*time.Minute)
+	c.rdb.Set(ctx, key(postID), "0", 24*time.Hour)
+	
 }
 
 
