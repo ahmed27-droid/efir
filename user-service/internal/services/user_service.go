@@ -1,7 +1,6 @@
 package services
 
 import (
-	
 	"strings"
 	"user/internal/auth"
 	"user/internal/dto"
@@ -10,12 +9,12 @@ import (
 	"user/internal/repository"
 )
 
-
 type UserService interface {
 	Register(req dto.RegisterRequest) (*models.User, error)
 	Login(req dto.LoginRequest) (string, error)
-
-} 
+	GetByID(id uint) (*models.User, error)
+	UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*models.User, error)
+}
 
 type userService struct {
 	userRepo repository.UserRepository
@@ -25,6 +24,18 @@ func NewUserService(userRepo repository.UserRepository) UserService {
 	return &userService{userRepo: userRepo}
 }
 
+func (s *userService) GetByID(id uint) (*models.User, error) {
+
+	if id == 0 {
+		return nil, errs.ErrInvalidUserID
+	}
+	user, err := s.userRepo.GetByID(id)
+
+	if err != nil {
+		return nil, err
+	}
+	return user, err
+}
 
 func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 
@@ -64,12 +75,12 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	}
 
 	user := &models.User{
-		Email: email,
-		Username: username,
+		Email:     email,
+		Username:  username,
 		FirstName: firsname,
-		LastName: lastname,
-		Password: hashedPassword,
-		Role: models.RoleReader,
+		LastName:  lastname,
+		Password:  hashedPassword,
+		Role:      models.RoleReader,
 	}
 
 	if err := s.userRepo.Create(user); err != nil {
@@ -79,7 +90,7 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	return user, nil
 }
 
-func (s * userService) Login(req dto.LoginRequest) (string, error) {
+func (s *userService) Login(req dto.LoginRequest) (string, error) {
 	email := strings.TrimSpace(strings.ToLower(req.Email))
 
 	user, err := s.userRepo.GetByEmail(email)
@@ -100,4 +111,40 @@ func (s * userService) Login(req dto.LoginRequest) (string, error) {
 
 	return token, nil
 
+}
+
+func (s *userService) UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*models.User, error) {
+
+	user, err := s.userRepo.GetByID(UserID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if req.Username != nil && *req.Username != user.Username {
+		exists, err := s.userRepo.ExistsByUsername(*req.Username)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if exists {
+			return nil, errs.ErrCheckUsernameExists
+		}
+		user.Username = *req.Username
+	}
+
+	if req.FirstName != nil {
+		user.FirstName = *req.FirstName
+	}
+
+	if req.LastName != nil {
+		user.LastName = *req.Username
+	}
+
+	if err := s.userRepo.Update(user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
