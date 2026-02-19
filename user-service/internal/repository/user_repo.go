@@ -46,7 +46,7 @@ func (r *userRepository) GetByID(id uint) (*models.User, error) {
 }
 
 func (r *userRepository) Update(user *models.User) error {
-	return r.db.Save(&user).Error
+	return r.db.Save(user).Error
 }
 
 func (r *userRepository) GetByEmail(email string) (*models.User, error) {

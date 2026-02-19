@@ -34,7 +34,7 @@ func (s *userService) GetByID(id uint) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return user, err
+	return user, nil
 }
 
 func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
@@ -129,7 +129,7 @@ func (s *userService) UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*mo
 		}
 
 		if exists {
-			return nil, errs.ErrCheckUsernameExists
+			return nil, errs.ErrUsernameAlreadyExists
 		}
 		user.Username = *req.Username
 	}
@@ -139,7 +139,7 @@ func (s *userService) UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*mo
 	}
 
 	if req.LastName != nil {
-		user.LastName = *req.Username
+		user.LastName = *req.LastName
 	}
 
 	if err := s.userRepo.Update(user); err != nil {
