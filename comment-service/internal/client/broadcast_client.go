@@ -1,9 +1,10 @@
 package client
 
 import (
-	"commen-sService/internal/errors"
+	"comment-Service/internal/errors"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -22,8 +23,11 @@ func (c *BroadcastClient) PostExists(postID uint) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer resp.Body.Close()
-	
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Println("failed to close response body:", err)
+		}
+	}()
 
 	if resp.StatusCode == http.StatusNotFound {
 		return false, nil
@@ -43,10 +47,14 @@ func (c *BroadcastClient) IsActive(postID uint) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Println("failed to close response body:", err)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
-		return false, fmt.Errorf("status code: %d", resp.StatusCode)
+		return false, errors.ErrUnexpectedStatusCode
 	}
 
 	var result struct {
@@ -59,4 +67,3 @@ func (c *BroadcastClient) IsActive(postID uint) (bool, error) {
 
 	return result.Active, nil
 }
-

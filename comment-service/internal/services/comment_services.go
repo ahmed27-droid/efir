@@ -1,19 +1,19 @@
 package services
 
 import (
-	"commen-sService/internal/cache"
-	"commen-sService/internal/client"
-	"commen-sService/internal/dto"
-	"commen-sService/internal/errors"
-	"commen-sService/internal/models"
-	"commen-sService/internal/repository"
+	"comment-Service/internal/cache"
+	"comment-Service/internal/client"
+	"comment-Service/internal/dto"
+	"comment-Service/internal/errors"
+	"comment-Service/internal/models"
+	"comment-Service/internal/repository"
 )
 
 type CommentServices interface {
 	CreateComment(userID uint, req *dto.CreateCommentDTO) (*models.Comment, error)
-	GetCommentByID(commentID uint) (*models.Comment, error)
-	UpdateComment(commentID uint, req *dto.UpdateCommentDTO) (*models.Comment, error)
-	DeleteComment(commentID uint) error
+	GetCommentByID(comID uint) (*models.Comment, error)
+	UpdateComment(comID uint, req *dto.UpdateCommentDTO) (*models.Comment, error)
+	DeleteComment(comID uint) error
 	ListComments(postID uint, page, limit int) ([]models.Comment, error)
 }
 
@@ -24,10 +24,10 @@ type commentServices struct {
 }
 
 func NewCommentServices(
-	commentRepo repository.CommentRepository, 
-	cache cache.BroadcastCache, 
+	commentRepo repository.CommentRepository,
+	cache cache.BroadcastCache,
 	broadcast client.BroadcastClient,
-	) CommentServices {
+) CommentServices {
 	return &commentServices{
 		commentRepo: commentRepo,
 		cache:       cache,
@@ -75,7 +75,7 @@ func (s *commentServices) GetCommentByID(commentID uint) (*models.Comment, error
 }
 
 func (s *commentServices) UpdateComment(commentID uint, req *dto.UpdateCommentDTO) (*models.Comment, error) {
-	comment, err := s.commentRepo.GetByID(commentID)	
+	comment, err := s.commentRepo.GetByID(commentID)
 	if err != nil {
 		return nil, err
 	}
@@ -91,15 +91,11 @@ func (s *commentServices) UpdateComment(commentID uint, req *dto.UpdateCommentDT
 	return comment, nil
 }
 
-func (s *commentServices) DeleteComment(commentID uint) error {
-	comment, err := s.commentRepo.GetByID(commentID)
-	if err != nil {
-		return err
-	}
-	return s.commentRepo.Delete(comment)
+func (s *commentServices) DeleteComment(comID uint) error {
+	return s.commentRepo.Delete(comID)
 }
 
-func (s *commentServices) ListComments(postID uint, page, limit int) ([]models.Comment, error) {	
+func (s *commentServices) ListComments(postID uint, page, limit int) ([]models.Comment, error) {
 	exists, err := s.broadcast.PostExists(postID)
 	if err != nil {
 		return nil, err

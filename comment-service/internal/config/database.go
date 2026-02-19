@@ -18,7 +18,7 @@ func DatabaseConnect() *gorm.DB {
 	dns := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPass, dbName)
 
 	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil{
+	if err != nil {
 		os.Exit(1)
 	}
 
