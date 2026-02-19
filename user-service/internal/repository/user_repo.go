@@ -12,6 +12,7 @@ import (
 type UserRepository interface {
 	Create(user *models.User) error
 	GetByID(id uint) (*models.User, error)
+	Update(User *models.User) error
 	GetByEmail(email string) (*models.User, error)
 	GetByUsername(username string) (*models.User, error)
 	ExistsByEmail(email string) (bool, error)
@@ -42,6 +43,10 @@ func (r *userRepository) GetByID(id uint) (*models.User, error) {
 	}
 	return &user, nil
 
+}
+
+func (r *userRepository) Update(user *models.User) error {
+	return r.db.Save(user).Error
 }
 
 func (r *userRepository) GetByEmail(email string) (*models.User, error) {
@@ -97,3 +102,5 @@ func (r *userRepository) ExistsByUsername(username string) (bool, error) {
 
 	return count > 0, nil
 }
+
+
