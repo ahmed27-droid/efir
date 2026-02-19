@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"commen-sService/internal/models"
+	"comment-Service/internal/models"
 
 	"gorm.io/gorm"
 )
@@ -10,7 +10,7 @@ type CommentRepository interface {
 	Create(comment *models.Comment) error
 	GetByID(commentID uint) (*models.Comment, error)
 	Update(comment *models.Comment) error
-	Delete(comment *models.Comment) error
+	Delete(comID uint) error
 	List(postID uint, page, limit int) ([]models.Comment, error)
 }
 
@@ -39,22 +39,22 @@ func (r *commentRepository) Update(comment *models.Comment) error {
 	return r.db.Save(comment).Error
 }
 
-func (r *commentRepository) Delete(comment *models.Comment) error {
-	return r.db.Delete(comment).Error
+func (r *commentRepository) Delete(comID uint) error {
+	return r.db.Delete(&models.Comment{}, comID).Error
 }
 
-func (r *commentRepository) List(postID uint, page, limit int) ([]models.Comment, error){
+func (r *commentRepository) List(postID uint, page, limit int) ([]models.Comment, error) {
 	var comments []models.Comment
 
 	offset := (page - 1) * limit
 
-	if err :=  r.db.
-	Where("post_id = ?", postID).
-	Order("created_at desc").
-	Limit(limit).
-	Offset(offset).
-	Find(&comments).Error; err != nil{
-		return  nil, err
+	if err := r.db.
+		Where("post_id = ?", postID).
+		Order("created_at desc").
+		Limit(limit).
+		Offset(offset).
+		Find(&comments).Error; err != nil {
+		return nil, err
 	}
-	return  comments, nil
+	return comments, nil
 }

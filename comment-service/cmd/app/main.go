@@ -1,9 +1,8 @@
 package main
 
 import (
-	"commen-sService/internal/config"
-	"commen-sService/internal/models"
-	
+	"comment-Service/internal/config"
+	"comment-Service/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
