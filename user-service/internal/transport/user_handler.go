@@ -89,7 +89,7 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 	user, err := h.userService.UpdateProfile(uint(id), req)
 
 	if err != nil {
-		if errors.Is(err, errs.ErrCheckUsernameExists) {
+		if errors.Is(err, errs.ErrUsernameAlreadyExists) {
 			ctx.JSON(http.StatusConflict, gin.H{
 				"error": "Username already taken",
 			})
