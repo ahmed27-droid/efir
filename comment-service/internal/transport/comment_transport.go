@@ -61,7 +61,7 @@ func (t *CommentTransport) UpdateComment(c *gin.Context) {
 }
 
 func (t *CommentTransport) DeleteComment(c *gin.Context) {
-	id, err := strconv.Atoi("id")
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
@@ -84,7 +84,7 @@ func (t *CommentTransport) ListComments(c *gin.Context) {
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid limit"})
 		return
 	}
 
@@ -96,7 +96,7 @@ func (t *CommentTransport) ListComments(c *gin.Context) {
 
 	comments, err := t.comService.ListComments(uint(id), page, limit)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid limit"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list comments"})
 		return
 	}
 

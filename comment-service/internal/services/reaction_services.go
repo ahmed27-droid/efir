@@ -74,10 +74,6 @@ func (s *reactionService) UpdateReaction(reactionID uint, req dto.UpdateReaction
 		return nil, err
 	}
 
-	if req.Type == nil {
-		return reaction, nil
-	}
-
 	if req.Type != nil {
 		reaction.Type = models.ReactionType(*req.Type)
 	}
