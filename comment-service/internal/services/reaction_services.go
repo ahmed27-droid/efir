@@ -74,6 +74,10 @@ func (s *reactionService) UpdateReaction(reactionID uint, req dto.UpdateReaction
 		return nil, err
 	}
 
+	if req.Type == nil {
+		return reaction, nil
+	}
+
 	if req.Type != nil {
 		reaction.Type = models.ReactionType(*req.Type)
 	}
@@ -89,5 +93,12 @@ func (s *reactionService) DeleteReaction(reactionID uint) error {
 }
 
 func (s *reactionService) ListReaction(postID uint) (map[string]int64, error) {
+	exists, err := s.broadcast.PostExists(postID)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.ErrPostNotFound
+	}
 	return s.reactionRepo.List(postID)
 }
