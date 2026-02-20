@@ -89,5 +89,12 @@ func (s *reactionService) DeleteReaction(reactionID uint) error {
 }
 
 func (s *reactionService) ListReaction(postID uint) (map[string]int64, error) {
+	exists, err := s.broadcast.PostExists(postID)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.ErrPostNotFound
+	}
 	return s.reactionRepo.List(postID)
 }

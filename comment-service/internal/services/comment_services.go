@@ -10,7 +10,7 @@ import (
 )
 
 type CommentServices interface {
-	CreateComment(userID uint, req *dto.CreateCommentDTO) (*models.Comment, error)
+	CreateComment(postID uint, req *dto.CreateCommentDTO) (*models.Comment, error)
 	GetCommentByID(comID uint) (*models.Comment, error)
 	UpdateComment(comID uint, req *dto.UpdateCommentDTO) (*models.Comment, error)
 	DeleteComment(comID uint) error
@@ -35,8 +35,8 @@ func NewCommentServices(
 	}
 }
 
-func (s *commentServices) CreateComment(userID uint, req *dto.CreateCommentDTO) (*models.Comment, error) {
-	exists, err := s.broadcast.PostExists(req.PostID)
+func (s *commentServices) CreateComment(postID uint, req *dto.CreateCommentDTO) (*models.Comment, error) {
+	exists, err := s.broadcast.PostExists(postID)
 	if err != nil {
 		return nil, err
 	}
@@ -44,10 +44,10 @@ func (s *commentServices) CreateComment(userID uint, req *dto.CreateCommentDTO) 
 		return nil, errors.ErrPostNotFound
 	}
 
-	active, found := s.cache.IsActive(req.PostID)
+	active, found := s.cache.IsActive(postID)
 
 	if !found {
-		active, err = s.broadcast.IsActive(req.PostID)
+		active, err = s.broadcast.IsActive(postID)
 		if err != nil {
 			return nil, err
 		}
@@ -58,8 +58,8 @@ func (s *commentServices) CreateComment(userID uint, req *dto.CreateCommentDTO) 
 	}
 
 	comment := &models.Comment{
-		PostID:  req.PostID,
-		UserID:  userID,
+		PostID:  postID,
+		UserID:  req.UserID,
 		Content: req.Content,
 	}
 
