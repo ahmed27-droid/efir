@@ -65,7 +65,7 @@ func (t *ReactionTransport) DeleteReaction(c *gin.Context){
 	}
 
 	if err := t.reactionService.DeleteReaction(uint(id)); err != nil{
-		c.JSON(http.StatusInternalServerError, gin.H{"error":"filed to delete reaction"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error":"failed to delete reaction"})
 		return
 	}
 
@@ -82,6 +82,7 @@ func (t *ReactionTransport) ListReaction(c *gin.Context){
 	reactions, err := t.reactionService.ListReaction(uint(id))
 	if err != nil{
 		c.JSON(http.StatusInternalServerError, gin.H{"error":"failed to list reaction"})
+		return
 	}
 
 	c.JSON(http.StatusOK, reactions)
