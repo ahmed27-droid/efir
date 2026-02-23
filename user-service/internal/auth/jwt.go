@@ -7,7 +7,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var secretKey = []byte("super-secret-key")
+type JWTManager struct {
+	secretKey []byte
+}
 
 type JwtCustomClaims struct {
 	UserID uint   `json:"user_id"`
@@ -15,7 +17,13 @@ type JwtCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateAccessToken(userID uint, role string) (string, error) {
+func NewJWTManager(secret string) *JWTManager {
+	return &JWTManager{
+		secretKey: []byte(secret),
+	}
+}
+func (j *JWTManager) GenerateAccessToken(userID uint, role string) (string, error) {
+
 	claims := JwtCustomClaims{
 		UserID: userID,
 		Role:   role,
@@ -26,16 +34,19 @@ func GenerateAccessToken(userID uint, role string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(secretKey)
+	return token.SignedString(j.secretKey)
 }
 
-func ValidateAccessToken(tokenString string) (*JwtCustomClaims, error) {
+func (j *JWTManager) ValidateAccessToken(tokenString string) (*JwtCustomClaims, error) {
 
 	token, err := jwt.ParseWithClaims(
 		tokenString,
 		&JwtCustomClaims{},
 		func(token *jwt.Token) (interface{}, error) {
-			return secretKey, nil
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, errors.New("unexpected signing method")
+			}
+			return j.secretKey, nil
 		},
 	)
 

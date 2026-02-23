@@ -1,5 +1,14 @@
 package dto
 
+type ShowUserResponse struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Role      string `json:"role"`
+}
+
 type RegisterRequest struct {
 	Email     string `json:"email" binding:"required,email,max=100"`
 	Username  string `json:"username" binding:"required,min=3,max=20,alphanum"`

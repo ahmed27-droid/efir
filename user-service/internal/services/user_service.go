@@ -18,10 +18,11 @@ type UserService interface {
 
 type userService struct {
 	userRepo repository.UserRepository
+	 jwtManager *auth.JWTManager
 }
 
-func NewUserService(userRepo repository.UserRepository) UserService {
-	return &userService{userRepo: userRepo}
+func NewUserService(userRepo repository.UserRepository, jwtManager *auth.JWTManager) UserService {
+	return &userService{userRepo: userRepo, jwtManager: jwtManager}
 }
 
 func (s *userService) GetByID(id uint) (*models.User, error) {
@@ -69,6 +70,7 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	}
 
 	hashedPassword, err := auth.HashPassword(req.Password)
+	// hashedPassword, err :=  s.jwtManager.HashPassword(req.Password)
 
 	if err != nil {
 		return nil, err
@@ -103,7 +105,7 @@ func (s *userService) Login(req dto.LoginRequest) (string, error) {
 		return "", errs.ErrInvalidCredentials
 	}
 
-	token, err := auth.GenerateAccessToken(user.ID, string(user.Role))
+	token, err := s.jwtManager.GenerateAccessToken(user.ID, string(user.Role))
 
 	if err != nil {
 		return "", err
