@@ -8,6 +8,7 @@ import (
 	"comment-Service/internal/repository"
 	"comment-Service/internal/services"
 	"comment-Service/internal/transport"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +21,11 @@ func main() {
 
 	rdb := config.NewRedis()
 
-	broadcastClient := client.NewBroadcastClient("http://localhost:8081")
+	broadcastURL := os.Getenv("BROADCAST_SERVICE_URL")
+	if broadcastURL == "" {
+		broadcastURL = "http://localhost:8081"
+	}
+	broadcastClient := client.NewBroadcastClient(broadcastURL)
 	cache := cache.NewRedisCache(rdb)
 
 	commentRepo := repository.NewCommentRepository(db)

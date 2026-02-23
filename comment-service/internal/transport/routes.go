@@ -13,7 +13,7 @@ func RegisterRoutes(
 	router.DELETE("/comments/:id", commentTransport.DeleteComment)
 
 	router.GET("/reactions", reactionTransport.ListReaction)
-	router.POST("posts/:id/reactions", reactionTransport.CreateReaction)
+	router.POST("/posts/:id/reactions", reactionTransport.CreateReaction)
 	router.PATCH("/reactions/:id", reactionTransport.UpdateReaction)
 	router.DELETE("/reactions/:id", reactionTransport.DeleteReaction)
 }
