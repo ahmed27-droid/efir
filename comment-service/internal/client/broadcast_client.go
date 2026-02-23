@@ -1,7 +1,7 @@
 package client
 
 import (
-	"comment-Service/internal/errors"
+	"comment-Service/internal/errs"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -34,7 +34,7 @@ func (c *BroadcastClient) PostExists(postID uint) (bool, error) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return false, errors.ErrBroadcastService
+		return false, errs.ErrBroadcastService
 	}
 
 	return true, nil
@@ -54,7 +54,7 @@ func (c *BroadcastClient) IsActive(postID uint) (bool, error) {
 	}()
 
 	if resp.StatusCode != http.StatusOK {
-		return false, errors.ErrUnexpectedStatusCode
+		return false, errs.ErrUnexpectedStatusCode
 	}
 
 	var result struct {

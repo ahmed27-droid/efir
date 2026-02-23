@@ -4,7 +4,7 @@ import (
 	"comment-Service/internal/cache"
 	"comment-Service/internal/client"
 	"comment-Service/internal/dto"
-	"comment-Service/internal/errors"
+	"comment-Service/internal/errs"
 	"comment-Service/internal/models"
 	"comment-Service/internal/repository"
 )
@@ -40,7 +40,7 @@ func (s *reactionService) CreateReaction(req dto.CreateReactionDTO) (*models.Rea
 		return nil, err
 	}
 	if !exists {
-		return nil, errors.ErrPostNotFound
+		return nil, errs.ErrPostNotFound
 	}
 
 	active, found := s.cache.IsActive(req.PostID)
@@ -52,7 +52,7 @@ func (s *reactionService) CreateReaction(req dto.CreateReactionDTO) (*models.Rea
 	}
 
 	if !active {
-		return nil, errors.ErrBroadcastNotActive
+		return nil, errs.ErrBroadcastNotActive
 	}
 
 	reaction := &models.Reaction{
@@ -94,7 +94,7 @@ func (s *reactionService) ListReaction(postID uint) (map[string]int64, error) {
 		return nil, err
 	}
 	if !exists {
-		return nil, errors.ErrPostNotFound
+		return nil, errs.ErrPostNotFound
 	}
 	return s.reactionRepo.List(postID)
 }

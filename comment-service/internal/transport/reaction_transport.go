@@ -2,7 +2,9 @@ package transport
 
 import (
 	"comment-Service/internal/dto"
+	"comment-Service/internal/errs"
 	"comment-Service/internal/services"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -27,7 +29,16 @@ func (t *ReactionTransport) CreateReaction(c *gin.Context) {
 
 	reaction, err := t.reactionService.CreateReaction(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create reaction"})
+		switch {
+		case errors.Is(err, errs.ErrPostNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
+		case errors.Is(err, errs.ErrBroadcastNotActive):
+			c.JSON(http.StatusForbidden, gin.H{"error": "broadcast is not active"})
+		case errors.Is(err, errs.ErrBroadcastService), errors.Is(err, errs.ErrUnexpectedStatusCode):
+			c.JSON(http.StatusBadGateway, gin.H{"error": "broadcast service error"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create reaction"})
+		}
 		return
 	}
 
@@ -50,7 +61,12 @@ func (t *ReactionTransport) UpdateReaction(c *gin.Context) {
 
 	reaction, err := t.reactionService.UpdateReaction(uint(id), req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update reaction"})
+		switch {
+		case errors.Is(err, errs.ErrReactionNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "reaction not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update reaction"})
+		}
 		return
 	}
 
@@ -65,7 +81,12 @@ func (t *ReactionTransport) DeleteReaction(c *gin.Context) {
 	}
 
 	if err := t.reactionService.DeleteReaction(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete reaction"})
+		switch {
+		case errors.Is(err, errs.ErrReactionNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "reaction not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete reaction"})
+		}
 		return
 	}
 
@@ -81,7 +102,14 @@ func (t *ReactionTransport) ListReaction(c *gin.Context) {
 
 	reactions, err := t.reactionService.ListReaction(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list reaction"})
+		switch {
+		case errors.Is(err, errs.ErrPostNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
+		case errors.Is(err, errs.ErrBroadcastService), errors.Is(err, errs.ErrUnexpectedStatusCode):
+			c.JSON(http.StatusBadGateway, gin.H{"error": "broadcast service error"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list reaction"})
+		}
 		return
 	}
 

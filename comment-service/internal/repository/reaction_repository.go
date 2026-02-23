@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"comment-Service/internal/errs"
 	"comment-Service/internal/models"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +31,11 @@ func (r *reactionRepository) Create(reaction *models.Reaction) error {
 func (r *reactionRepository) GetByID(reactionID uint) (*models.Reaction, error) {
 	var reaction models.Reaction
 
-	if err := r.db.First(&reaction, reactionID).Error; err != nil {
+	err := r.db.First(&reaction, reactionID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errs.ErrReactionNotFound
+		}
 		return nil, err
 	}
 	return &reaction, nil
