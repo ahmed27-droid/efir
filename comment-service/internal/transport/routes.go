@@ -7,7 +7,7 @@ func RegisterRoutes(
 	commentTransport *CommentTransport,
 	reactionTransport *ReactionTransport,
 ) {
-	router.GET("posts/:id/comments", commentTransport.ListComments)
+	router.GET("/posts/:id/comments", commentTransport.ListComments)
 	router.POST("/posts/:id/comments", commentTransport.CreateComment)
 	router.PATCH("/comments/:id", commentTransport.UpdateComment)
 	router.DELETE("/comments/:id", commentTransport.DeleteComment)
