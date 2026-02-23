@@ -2,7 +2,9 @@ package transport
 
 import (
 	"comment-Service/internal/dto"
+	"comment-Service/internal/errs"
 	"comment-Service/internal/services"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -32,7 +34,16 @@ func (t *CommentTransport) CreateComment(c *gin.Context) {
 
 	comment, err := t.comService.CreateComment(uint(id), &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create comment"})
+		switch {
+		case errors.Is(err, errs.ErrPostNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
+		case errors.Is(err, errs.ErrBroadcastNotActive):
+			c.JSON(http.StatusForbidden, gin.H{"error": "broadcast is not active"})
+		case errors.Is(err, errs.ErrBroadcastService), errors.Is(err, errs.ErrUnexpectedStatusCode):
+			c.JSON(http.StatusBadGateway, gin.H{"error": "broadcast service error"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create comment"})
+		}
 		return
 	}
 
@@ -53,7 +64,12 @@ func (t *CommentTransport) UpdateComment(c *gin.Context) {
 
 	comment, err := t.comService.UpdateComment(uint(id), &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update comment"})
+		switch {
+		case errors.Is(err, errs.ErrCommentNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "comment not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update comment"})
+		}
 		return
 	}
 
@@ -68,7 +84,12 @@ func (t *CommentTransport) DeleteComment(c *gin.Context) {
 	}
 
 	if err := t.comService.DeleteComment(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete comment"})
+		switch {
+		case errors.Is(err, errs.ErrCommentNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "comment not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete comment"})
+		}
 		return
 	}
 
@@ -96,7 +117,14 @@ func (t *CommentTransport) ListComments(c *gin.Context) {
 
 	comments, err := t.comService.ListComments(uint(id), page, limit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list comments"})
+		switch {
+		case errors.Is(err, errs.ErrPostNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
+		case errors.Is(err, errs.ErrBroadcastService), errors.Is(err, errs.ErrUnexpectedStatusCode):
+			c.JSON(http.StatusBadGateway, gin.H{"error": "broadcast service error"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to list comments"})
+		}
 		return
 	}
 

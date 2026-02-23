@@ -4,7 +4,7 @@ import (
 	"comment-Service/internal/cache"
 	"comment-Service/internal/client"
 	"comment-Service/internal/dto"
-	"comment-Service/internal/errors"
+	"comment-Service/internal/errs"
 	"comment-Service/internal/models"
 	"comment-Service/internal/repository"
 )
@@ -41,7 +41,7 @@ func (s *commentServices) CreateComment(postID uint, req *dto.CreateCommentDTO) 
 		return nil, err
 	}
 	if !exists {
-		return nil, errors.ErrPostNotFound
+		return nil, errs.ErrPostNotFound
 	}
 
 	active, found := s.cache.IsActive(postID)
@@ -54,7 +54,7 @@ func (s *commentServices) CreateComment(postID uint, req *dto.CreateCommentDTO) 
 	}
 
 	if !active {
-		return nil, errors.ErrBroadcastNotActive
+		return nil, errs.ErrBroadcastNotActive
 	}
 
 	comment := &models.Comment{
@@ -101,7 +101,7 @@ func (s *commentServices) ListComments(postID uint, page, limit int) ([]models.C
 		return nil, err
 	}
 	if !exists {
-		return nil, errors.ErrPostNotFound
+		return nil, errs.ErrPostNotFound
 	}
 
 	return s.commentRepo.List(postID, page, limit)
