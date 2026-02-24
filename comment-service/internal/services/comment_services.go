@@ -54,7 +54,10 @@ func (s *commentServices) CreateComment(postID uint, req *dto.CreateCommentDTO) 
 	}
 
 	if !active {
+		s.cache.SetInActive(postID)
 		return nil, errs.ErrBroadcastNotActive
+	} else {
+		s.cache.SetActive(postID)
 	}
 
 	comment := &models.Comment{

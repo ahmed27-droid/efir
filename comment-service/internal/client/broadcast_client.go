@@ -10,6 +10,7 @@ import (
 
 type BroadcastClient struct {
 	baseURL string
+	// cache   cache.BroadcastCache
 }
 
 func NewBroadcastClient(baseURL string) *BroadcastClient {

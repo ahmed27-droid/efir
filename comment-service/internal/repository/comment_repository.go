@@ -46,7 +46,14 @@ func (r *commentRepository) Update(comment *models.Comment) error {
 }
 
 func (r *commentRepository) Delete(comID uint) error {
-	return r.db.Delete(&models.Comment{}, comID).Error
+	result := r.db.Delete(&models.Comment{}, comID)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errs.ErrCommentNotFound
+	}
+	return nil
 }
 
 func (r *commentRepository) List(postID uint, page, limit int) ([]models.Comment, error) {
