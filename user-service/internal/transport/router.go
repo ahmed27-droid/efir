@@ -9,11 +9,10 @@ func RegisterRoutes(
 ){
 
 	
-	{
 		router.POST("/register", authHandler.Register)
 		router.POST("/login", authHandler.Login)
 		router.GET("/users/:id", userHandler.GetByID)
 		router.PATCH("/users/:id", userHandler.UpdateProfile)
 	}
-}
+
 

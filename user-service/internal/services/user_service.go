@@ -70,7 +70,6 @@ func (s *userService) Register(req dto.RegisterRequest) (*models.User, error) {
 	}
 
 	hashedPassword, err := auth.HashPassword(req.Password)
-	// hashedPassword, err :=  s.jwtManager.HashPassword(req.Password)
 
 	if err != nil {
 		return nil, err
