@@ -17,6 +17,7 @@ type UserRepository interface {
 	GetByUsername(username string) (*models.User, error)
 	ExistsByEmail(email string) (bool, error)
 	ExistsByUsername(username string) (bool, error)
+	Delete(id uint) error
 }
 
 type userRepository struct {
@@ -104,3 +105,6 @@ func (r *userRepository) ExistsByUsername(username string) (bool, error) {
 }
 
 
+func (r *userRepository) Delete(id uint) error {
+	return r.db.Delete(&models.User{}, id).Error
+}

@@ -12,11 +12,11 @@ import (
 )
 
 type UserHandler struct {
-	userService services.UserService
+	Service services.UserService
 }
 
 func NewUserHandler(userService services.UserService) *UserHandler {
-	return &UserHandler{userService: userService}
+	return &UserHandler{Service: userService}
 }
 
 func (h *UserHandler) GetByID(ctx *gin.Context) {
@@ -31,7 +31,7 @@ func (h *UserHandler) GetByID(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetByID(uint(id))
+	user, err := h.Service.GetByID(uint(id))
 
 	if err != nil {
 		if errors.Is(err, errs.ErrUserNotFound) {
@@ -86,7 +86,7 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.UpdateProfile(uint(id), req)
+	user, err := h.Service.UpdateProfile(uint(id), req)
 
 	if err != nil {
 		if errors.Is(err, errs.ErrUsernameAlreadyExists) {
@@ -106,3 +106,29 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 		"username": user.Username,
 	})
 }
+
+/*
+админ
+удалить пост (соотвественно удалять комментарии, реакции поста)
+создать категорию
+удалить категорию (удалять все посты внутри категории)
+удалить юзера (ридер/автор) (не забывать удалять посты авторов, реакции ридеров)
+*/
+
+/*
+автор
+создавать посты в категориях
+удалять свои посты
+*/
+
+/*
+читатель
+ставит реакции
+убирает реакции
+пишет коментарии
+удаляет комментарии 
+*/
+
+
+
+
