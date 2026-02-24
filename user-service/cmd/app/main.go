@@ -7,6 +7,7 @@ import (
 	"user/internal/models"
 	"user/internal/repository"
 	"user/internal/services"
+	"user/internal/transport"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,8 +27,15 @@ func main() {
 	jwtManager := auth.NewJWTManager(cfg.JWTSecret)
 
 	userService := services.NewUserService(userRepo, jwtManager)
+	userHandler := transport.NewUserHandler(userService)
+	authHandler := transport.NewAuthHandler(userService)
 
 	r := gin.Default()
 
-	
+	transport.RegisterRoutes(r, userHandler, authHandler)
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
+
 }
