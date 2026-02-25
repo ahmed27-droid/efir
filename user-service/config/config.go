@@ -6,22 +6,18 @@ import (
 )
 
 type Config struct {
-	JWTSecret          string
-	PostServiceURL     string
-	CategoryServiceURL string
-	ReactionServiceURL string
+	JWTSecret string
 }
 
 func Load() *Config {
+
 	cfg := &Config{
-		JWTSecret:          os.Getenv("JWT_SECRET"),
-		PostServiceURL:     os.Getenv("POST_SERVICE_URL"),
-		CategoryServiceURL: os.Getenv("CATEGORY_SERVICE_URL"),
-		ReactionServiceURL: os.Getenv("REACTION_SERVICE_URL"),
+		JWTSecret: os.Getenv("JWT_SECRET"),
 	}
 
 	if cfg.JWTSecret == "" {
 		log.Fatal("JWT_SECRET is not set")
 	}
+
 	return cfg
 }
