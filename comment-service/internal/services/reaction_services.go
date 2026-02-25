@@ -1,12 +1,12 @@
 package services
 
 import (
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
-	"comment-Service/internal/dto"
-	"comment-Service/internal/errs"
-	"comment-Service/internal/models"
-	"comment-Service/internal/repository"
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
+	"comment-service/internal/dto"
+	"comment-service/internal/errs"
+	"comment-service/internal/models"
+	"comment-service/internal/repository"
 )
 
 type ReactionServices interface {

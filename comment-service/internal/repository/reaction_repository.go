@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"comment-Service/internal/errs"
-	"comment-Service/internal/models"
+	"comment-service/internal/errs"
+	"comment-service/internal/models"
 	"errors"
 
 	"gorm.io/gorm"

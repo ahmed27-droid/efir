@@ -1,12 +1,11 @@
 package client
 
 import (
+	"comment-service/internal/cache"
 	"context"
 	"encoding/json"
 	"log"
 	"strings"
-
-	"comment-Service/internal/cache"
 
 	"github.com/segmentio/kafka-go"
 )

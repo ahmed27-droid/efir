@@ -1,7 +1,7 @@
 package client
 
 import (
-	"comment-Service/internal/errs"
+	"comment-service/internal/errs"
 	"encoding/json"
 	"fmt"
 	"log"
