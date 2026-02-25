@@ -33,9 +33,6 @@ func (s *subscriptionService) Unsubscribe(subsID uint) error {
 }
 
 func (s *subscriptionService) GetSubscribers(categoryID uint) ([]uint, error) {
-	userIDs, err := s.subRepo.GetUsersByCategory(categoryID)
-	if err != nil {
-		return nil, err
-	}
-	return userIDs, nil
+	return s.subRepo.GetUsersByCategory(categoryID)
+	
 }

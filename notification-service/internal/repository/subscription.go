@@ -50,7 +50,7 @@ func (r *subscriptionRepository) GetUsersByCategory(categoryID uint) ([]uint, er
 	Where("category_id = ?", categoryID).
 	Pluck("user_id", &userIDs).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if len(userIDs) == 0 {
 			return nil, errs.ErrSubscriptionNotFound
 		}
 		return nil, err
