@@ -1,0 +1,20 @@
+### Ping
+GET http://localhost:8082/ping
+Content-Type: application/json
+
+### Categories
+GET http://localhost:8082/categories
+Content-Type: application/json
+
+### Broadcast create
+POST http://localhost:8082/broadcast
+Content-Type: application/json
+
+{
+  "name": "Реал Мадрид - Барселона",
+  "category_id": 1
+}
+
+### Broadcast start
+POST http://localhost:8082/broadcast/1/start
+Content-Type: application/json
