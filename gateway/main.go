@@ -8,7 +8,10 @@ import (
 )
 
 func createProxy(target string) *httputil.ReverseProxy {
-	u, _ := url.Parse(target)
+	u, err := url.Parse(target)
+	if err != nil {
+		return nil
+	}
 	return httputil.NewSingleHostReverseProxy(u)
 }
 
