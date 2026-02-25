@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"comment-Service/internal/errs"
-	"comment-Service/internal/models"
+	"comment-service/internal/errs"
+	"comment-service/internal/models"
 	"errors"
 
 	"gorm.io/gorm"
@@ -46,7 +46,14 @@ func (r *reactionRepository) Update(reaction *models.Reaction) error {
 }
 
 func (r *reactionRepository) Delete(reactionID uint) error {
-	return r.db.Delete(&models.Reaction{}, reactionID).Error
+	result := r.db.Delete(&models.Reaction{}, reactionID)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errs.ErrReactionNotFound
+	}
+	return nil
 }
 
 type reactionCountRaw struct {

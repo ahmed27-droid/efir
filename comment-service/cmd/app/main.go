@@ -1,13 +1,15 @@
 package main
 
 import (
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
-	"comment-Service/internal/config"
-	"comment-Service/internal/models"
-	"comment-Service/internal/repository"
-	"comment-Service/internal/services"
-	"comment-Service/internal/transport"
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
+	"comment-service/internal/config"
+	"comment-service/internal/kafka"
+	"comment-service/internal/models"
+	"comment-service/internal/repository"
+	"comment-service/internal/services"
+	"comment-service/internal/transport"
+	"context"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +19,9 @@ func main() {
 
 	db := config.DatabaseConnect()
 
-	db.AutoMigrate(&models.Comment{}, &models.Reaction{})
+	if err := db.AutoMigrate(&models.Comment{}, &models.Reaction{}); err != nil {
+		panic("failed to migrate database: " + err.Error())
+	}
 
 	rdb := config.NewRedis()
 
@@ -44,5 +48,15 @@ func main() {
 		reactionTransport,
 	)
 
-	router.Run()
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		kafka.RunWorker(ctx, cache)
+	}()
+
+	defer cancel()
+
+	if err := router.Run(":8080"); err != nil {
+		panic("failed to run server: " + err.Error())
+	}
+
 }

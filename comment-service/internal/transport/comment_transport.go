@@ -1,9 +1,9 @@
 package transport
 
 import (
-	"comment-Service/internal/dto"
-	"comment-Service/internal/errs"
-	"comment-Service/internal/services"
+	"comment-service/internal/dto"
+	"comment-service/internal/errs"
+	"comment-service/internal/services"
 	"errors"
 	"net/http"
 	"strconv"

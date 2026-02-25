@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.air.toml
+*.md
+.DS_Store
+node_modules
+vendor
+.idea
+.vscode
+*.log

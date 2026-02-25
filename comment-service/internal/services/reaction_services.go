@@ -1,16 +1,16 @@
 package services
 
 import (
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
-	"comment-Service/internal/dto"
-	"comment-Service/internal/errs"
-	"comment-Service/internal/models"
-	"comment-Service/internal/repository"
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
+	"comment-service/internal/dto"
+	"comment-service/internal/errs"
+	"comment-service/internal/models"
+	"comment-service/internal/repository"
 )
 
 type ReactionServices interface {
-	CreateReaction(req dto.CreateReactionDTO) (*models.Reaction, error)
+	CreateReaction(postID uint, req dto.CreateReactionDTO) (*models.Reaction, error)
 	UpdateReaction(reactionID uint, req dto.UpdateReactionDTO) (*models.Reaction, error)
 	DeleteReaction(reactionID uint) error
 	ListReaction(postID uint) (map[string]int64, error)
@@ -34,8 +34,8 @@ func NewReactionService(
 	}
 }
 
-func (s *reactionService) CreateReaction(req dto.CreateReactionDTO) (*models.Reaction, error) {
-	exists, err := s.broadcast.PostExists(req.PostID)
+func (s *reactionService) CreateReaction(postID uint, req dto.CreateReactionDTO) (*models.Reaction, error) {
+	exists, err := s.broadcast.PostExists(postID)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +43,9 @@ func (s *reactionService) CreateReaction(req dto.CreateReactionDTO) (*models.Rea
 		return nil, errs.ErrPostNotFound
 	}
 
-	active, found := s.cache.IsActive(req.PostID)
+	active, found := s.cache.IsActive(postID)
 	if !found {
-		active, err = s.broadcast.IsActive(req.PostID)
+		active, err = s.broadcast.IsActive(postID)
 		if err != nil {
 			return nil, err
 		}
@@ -56,7 +56,7 @@ func (s *reactionService) CreateReaction(req dto.CreateReactionDTO) (*models.Rea
 	}
 
 	reaction := &models.Reaction{
-		PostID: req.PostID,
+		PostID: postID,
 		UserID: req.UserID,
 		Type:   models.ReactionType(req.Type),
 	}
