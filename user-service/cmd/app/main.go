@@ -10,9 +10,14 @@ import (
 	"user/internal/transport"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	if err := godotenv.Load(); err != nil {
+		log.Println(".env not found, using system environment")
+	}
 
 	cfg := config.Load()
 
@@ -34,7 +39,7 @@ func main() {
 
 	transport.RegisterRoutes(r, userHandler, authHandler)
 
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(":8088"); err != nil {
 		log.Fatal(err)
 	}
 
