@@ -1,13 +1,12 @@
 package kafka
 
 import (
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
 	"context"
 	"log"
 	"os"
 	"strings"
-
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
 )
 
 func RunWorker(ctx context.Context, bc cache.BroadcastCache) {

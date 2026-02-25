@@ -1,4 +1,4 @@
-module comment-Service
+module comment-service
 
 go 1.26.0
 
@@ -10,7 +10,10 @@ require (
 
 require github.com/redis/go-redis/v9 v9.18.0
 
-require github.com/segmentio/kafka-go v0.4.50
+require (
+	github.com/joho/godotenv v1.5.1
+	github.com/segmentio/kafka-go v0.4.50
+)
 
 require (
 	github.com/bytedance/sonic v1.14.0 // indirect

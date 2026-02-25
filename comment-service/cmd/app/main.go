@@ -1,17 +1,16 @@
 package main
 
 import (
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
+	"comment-service/internal/config"
+	"comment-service/internal/kafka"
+	"comment-service/internal/models"
+	"comment-service/internal/repository"
+	"comment-service/internal/services"
+	"comment-service/internal/transport"
 	"context"
 	"os"
-
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
-	"comment-Service/internal/config"
-	"comment-Service/internal/kafka"
-	"comment-Service/internal/models"
-	"comment-Service/internal/repository"
-	"comment-Service/internal/services"
-	"comment-Service/internal/transport"
 
 	"github.com/gin-gonic/gin"
 )
