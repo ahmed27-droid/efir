@@ -11,6 +11,7 @@ import (
 type BroadcastCache interface {
 	IsActive(postID uint) (bool, bool)
 	SetInActive(postID uint)
+	SetActive(postID uint)
 }
 
 type RedisCache struct {
@@ -42,4 +43,9 @@ func (c *RedisCache) SetInActive(postID uint) {
 	ctx := context.Background()
 	c.rdb.Set(ctx, key(postID), "0", 24*time.Hour)
 
+}
+
+func (c *RedisCache) SetActive(postID uint) {
+	ctx := context.Background()
+	c.rdb.Set(ctx, key(postID), "1", 24*time.Hour)
 }

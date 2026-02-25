@@ -1,12 +1,12 @@
 package services
 
 import (
-	"comment-Service/internal/cache"
-	"comment-Service/internal/client"
-	"comment-Service/internal/dto"
-	"comment-Service/internal/errs"
-	"comment-Service/internal/models"
-	"comment-Service/internal/repository"
+	"comment-service/internal/cache"
+	"comment-service/internal/client"
+	"comment-service/internal/dto"
+	"comment-service/internal/errs"
+	"comment-service/internal/models"
+	"comment-service/internal/repository"
 )
 
 type CommentServices interface {
@@ -54,7 +54,10 @@ func (s *commentServices) CreateComment(postID uint, req *dto.CreateCommentDTO) 
 	}
 
 	if !active {
+		s.cache.SetInActive(postID)
 		return nil, errs.ErrBroadcastNotActive
+	} else {
+		s.cache.SetActive(postID)
 	}
 
 	comment := &models.Comment{

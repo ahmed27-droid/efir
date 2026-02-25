@@ -1,11 +1,5 @@
-run:
-	go run cmd/app/main.go
+.PHONY: kafka-topics
 
-fmt:
-	go fmt ./...
-
-dev:
-	air
-
-lint:
-	golangci-lint run ./...
+# Запускает топики внутри kafka контейнера
+kafka-topics:
+	docker compose exec kafka /opt/kafka/topics.sh

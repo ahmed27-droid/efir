@@ -1,9 +1,9 @@
 package transport
 
 import (
-	"comment-Service/internal/dto"
-	"comment-Service/internal/errs"
-	"comment-Service/internal/services"
+	"comment-service/internal/dto"
+	"comment-service/internal/errs"
+	"comment-service/internal/services"
 	"errors"
 	"net/http"
 	"strconv"
@@ -20,6 +20,11 @@ func NewReactionTransport(reactionService services.ReactionServices) *ReactionTr
 }
 
 func (t *ReactionTransport) CreateReaction(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
 	var req dto.CreateReactionDTO
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -27,7 +32,7 @@ func (t *ReactionTransport) CreateReaction(c *gin.Context) {
 		return
 	}
 
-	reaction, err := t.reactionService.CreateReaction(req)
+	reaction, err := t.reactionService.CreateReaction(uint(id), req)
 	if err != nil {
 		switch {
 		case errors.Is(err, errs.ErrPostNotFound):
