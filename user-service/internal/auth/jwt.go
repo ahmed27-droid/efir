@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -22,6 +21,7 @@ func NewJWTManager(secret string) *JWTManager {
 		secretKey: []byte(secret),
 	}
 }
+
 func (j *JWTManager) GenerateAccessToken(userID uint, role string) (string, error) {
 
 	claims := JwtCustomClaims{
@@ -35,28 +35,4 @@ func (j *JWTManager) GenerateAccessToken(userID uint, role string) (string, erro
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.secretKey)
-}
-
-func (j *JWTManager) ValidateAccessToken(tokenString string) (*JwtCustomClaims, error) {
-
-	token, err := jwt.ParseWithClaims(
-		tokenString,
-		&JwtCustomClaims{},
-		func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, errors.New("unexpected signing method")
-			}
-			return j.secretKey, nil
-		},
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	claims, ok := token.Claims.(*JwtCustomClaims)
-	if !ok || !token.Valid {
-		return nil, errors.New("invalid token")
-	}
-	return claims, nil
 }
