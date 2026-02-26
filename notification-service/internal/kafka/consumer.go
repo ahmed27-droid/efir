@@ -23,7 +23,7 @@ func (n Notification) Broadcast(ctx context.Context) {
 	}
 	group := os.Getenv("KAFKA_GROUP")
 	if group == "" {
-		group = "comment-service-consumer"
+		group = "notification-service-consumer"
 	}
 
 	brokers := strings.Split(brokersEnv, ",")
@@ -52,11 +52,11 @@ func (n Notification) Posts(ctx context.Context) {
 	}
 	topic := os.Getenv("KAFKA_TOPIC")
 	if topic == "" {
-		topic = "broadcast.started"
+		topic = "post.created"
 	}
 	group := os.Getenv("KAFKA_GROUP")
 	if group == "" {
-		group = "comment-service-consumer"
+		group = "notification-service-consumer"
 	}
 
 	brokers := strings.Split(brokersEnv, ",")

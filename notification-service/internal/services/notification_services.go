@@ -73,14 +73,14 @@ func (s *notificationService) CreateNotifications(userIDs []uint, message string
 	return s.notifRepo.CreateBatch(notifications)
 }
 
-func (s notificationService) MarkAsRead(notificationID uint, userID uint) error{
+func (s *notificationService) MarkAsRead(notificationID uint, userID uint) error{
 	return s.notifRepo.MarkAsRead(notificationID, userID)
 }
 
-func (s notificationService) MarkAllAsRead(userID uint) error {
+func (s *notificationService) MarkAllAsRead(userID uint) error {
 	return s.notifRepo.MarkAllAsRead(userID)
 }
 
-func (s notificationService) GetUnreadCount(userID uint) (int64, error) {
+func (s *notificationService) GetUnreadCount(userID uint) (int64, error) {
 	return s.notifRepo.GetUnreadCount(userID)
 }
