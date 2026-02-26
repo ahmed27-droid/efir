@@ -8,7 +8,7 @@ func RegisterRoutes(
 	authHandler *AuthHandler,
 ){
 
-		router.GET("/me", userHandler.GetByID)
+		router.GET("/me", userHandler.GetMe)
 		router.POST("/register", authHandler.Register)
 		router.POST("/login", authHandler.Login)
 		router.GET("/users/:id", userHandler.GetByID)

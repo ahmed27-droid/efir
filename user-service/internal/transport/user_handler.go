@@ -123,17 +123,17 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 
 	if err != nil {
 		if errors.Is(err, errs.ErrUserNotFound) {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"error": "user not found",
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"error": "user not found",
+			})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to retrieve user",
 		})
 		return
 	}
-	ctx.JSON(http.StatusInternalServerError, gin.H{
-		"error": "Failed to retrieve user",
-	})
-	return
-}
-	
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"id":        user.ID,
 		"email":     user.Email,
@@ -164,9 +164,5 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 ставит реакции
 убирает реакции
 пишет коментарии
-удаляет комментарии 
+удаляет комментарии
 */
-
-
-
-
