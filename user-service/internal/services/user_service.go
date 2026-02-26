@@ -17,8 +17,8 @@ type UserService interface {
 }
 
 type userService struct {
-	userRepo repository.UserRepository
-	 jwtManager *auth.JWTManager
+	userRepo   repository.UserRepository
+	jwtManager *auth.JWTManager
 }
 
 func NewUserService(userRepo repository.UserRepository, jwtManager *auth.JWTManager) UserService {
