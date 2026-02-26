@@ -1,12 +1,15 @@
 package services
 
 import (
+	"errors"
 	"strings"
 	"user/internal/auth"
 	"user/internal/dto"
 	"user/internal/errs"
 	"user/internal/models"
 	"user/internal/repository"
+
+	"gorm.io/gorm"
 )
 
 type UserService interface {
@@ -14,6 +17,7 @@ type UserService interface {
 	Login(req dto.LoginRequest) (string, error)
 	GetByID(id uint) (*models.User, error)
 	UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*models.User, error)
+	GetMe(id uint) (*models.User, error)
 }
 
 type userService struct {
@@ -147,5 +151,22 @@ func (s *userService) UpdateProfile(UserID uint, req dto.UpdateUserRequest) (*mo
 		return nil, err
 	}
 
+	return user, nil
+}
+
+func (s *userService) GetMe(id uint) (*models.User, error) {
+	if id == 0 {
+		return nil, errs.ErrInvalidID
+	}
+
+	user, err := s.userRepo.GetByID(id)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errs.ErrUserNotFound
+		}
+		return nil, err
+		
+	}
 	return user, nil
 }

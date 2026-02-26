@@ -13,4 +13,5 @@ var (
 	ErrInvalidCredentials    = errors.New("invalid credentials")
 	ErrPasswordComplexity    = errors.New("password must contain letter, digit and special character")
 	ErrInvalidUserID         = errors.New("invalid user ID")
+	ErrInvalidID             = errors.New("Invalid ID")
 )
