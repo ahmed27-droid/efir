@@ -107,6 +107,37 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 	})
 }
 
+func (h *UserHandler) GetMe(ctx *gin.Context) {
+	userHeader := ctx.GetHeader("X-User-ID")
+
+	id, err := strconv.Atoi(userHeader)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid id",
+		})
+		return
+	}
+
+	user, err := h.Service.GetByID(uint(id))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": "failed to retrieve user",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"id":        user.ID,
+		"email":     user.Email,
+		"username":  user.Username,
+		"firstName": user.FirstName,
+		"lastName":  user.LastName,
+		"role":      user.Role,
+	})
+}
+
 /*
 админ
 удалить пост (соотвественно удалять комментарии, реакции поста)
