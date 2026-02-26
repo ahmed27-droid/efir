@@ -39,7 +39,7 @@ func main() {
 
 	transport.RegisterRoutes(r, userHandler, authHandler)
 
-	if err := r.Run(":8088"); err != nil {
+	if err := r.Run(":8089"); err != nil {
 		log.Fatal(err)
 	}
 
