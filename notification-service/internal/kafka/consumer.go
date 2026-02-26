@@ -46,7 +46,7 @@ func (n Notification) Broadcast(ctx context.Context) {
 }
 
 func (n Notification) Posts(ctx context.Context) {
-	brokersEnv := os.Getenv("KAFKA_BROKERS")
+	brokersEnv := os.Getenv("KAFKA_POST")
 	if brokersEnv == "" {
 		brokersEnv = "localhost:9092"
 	}

@@ -11,7 +11,6 @@ type NotificationService interface {
 	NotifyBroadcastStarted(event dto.BroadcastStartedEvent) error
 	NotifyPost(event dto.PostCreatedEvent) error
 	CreateNotifications(userIDs []uint, message string) error
-	//GetByUser(userID uint, limit, page int) ([]models.Notification, error)
 	MarkAsRead(notificationID uint, userID uint) error
 	MarkAllAsRead(userID uint) error
 	GetUnreadCount(userID uint) (int64, error)
