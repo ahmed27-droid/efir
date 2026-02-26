@@ -4,8 +4,10 @@ import (
 	"gateway/internal/config"
 	"gateway/internal/proxy"
 	"gateway/internal/routes"
+	"gateway/internal/auth"
 
 	"github.com/gin-gonic/gin"
+	
 )
 
 func main() {
@@ -19,7 +21,9 @@ func main() {
 	commentProxy, _ := proxy.CreateProxy(cfg.CommentServiceURL)
 	notificationProxy, _ := proxy.CreateProxy(cfg.NotificationServiceURL)
 
-	routes.Register(r, userProxy, broadcastProxy, commentProxy, notificationProxy)
+	jwtManager := auth.NewJWTManager(cfg.JWTSecret)
 
-	r.Run(":8091")
+	routes.Register(r, jwtManager, userProxy, broadcastProxy, commentProxy, notificationProxy)
+
+	r.Run(":8092")
 }

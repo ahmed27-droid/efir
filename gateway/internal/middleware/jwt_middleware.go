@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"gateway/internal/auth"
 	"net/http"
 	"strconv"
@@ -11,8 +12,8 @@ import (
 
 func JWTMiddleware(jwtManager *auth.JWTManager) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		authHeader := c.GetHeader("Authorization")
+		fmt.Println(authHeader)
 		if authHeader == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "missing token",
