@@ -122,12 +122,18 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 	user, err := h.Service.GetByID(uint(id))
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to retrieve user",
+		if errors.Is(err, errs.ErrUserNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "user not found",
 		})
 		return
 	}
-
+	ctx.JSON(http.StatusInternalServerError, gin.H{
+		"error": "Failed to retrieve user",
+	})
+	return
+}
+	
 	ctx.JSON(http.StatusOK, gin.H{
 		"id":        user.ID,
 		"email":     user.Email,
@@ -136,6 +142,7 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 		"lastName":  user.LastName,
 		"role":      user.Role,
 	})
+
 }
 
 /*
