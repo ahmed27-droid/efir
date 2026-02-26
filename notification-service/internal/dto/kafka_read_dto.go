@@ -12,6 +12,7 @@ type BroadcastStartedEvent struct {
 type PostCreatedEvent struct {
 	PostID      uint   `json:"post_id"`
 	Title       string `json:"title"`
-	BroadcastID uint   `json:"category_id"`
+	CategoryID  uint   `json:"category_id"`
+	BroadcastID uint   `json:"broadcast_id"`
 	Importance  string `json:"importance"` // "breaking", "normal"
 }
