@@ -16,7 +16,6 @@ type Config struct {
 }
 
 func Load() *Config {
-	// пропиши функцию из библиотеки godotenv, которая будет читать .env файл и будет загружать в окружение переменные, называется функция Load() вроде
 
 	if err := godotenv.Load(".env"); err != nil {
 		log.Println(".env not found, using system environment")

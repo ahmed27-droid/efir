@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-func CreateProxy(target string) (*httputil.ReverseProxy, error) { // ты создал функцию проксирования, но не используешь её
+func CreateProxy(target string) (*httputil.ReverseProxy, error) { 
 	u, err := url.Parse(target)
 	if err != nil {
 		return nil, err
