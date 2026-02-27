@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"time"
+
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -22,10 +24,12 @@ func DatabaseConnect() *gorm.DB {
 
 	dns := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPass, dbName)
 
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		os.Exit(1)
+	for {
+		db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
+		if err == nil {
+			return db
+		}
+		fmt.Println("database connection failed, retrying:", err)
+		time.Sleep(2 * time.Second)
 	}
-
-	return db
 }

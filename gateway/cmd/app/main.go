@@ -1,13 +1,12 @@
 package main
 
 import (
+	"gateway/internal/auth"
 	"gateway/internal/config"
 	"gateway/internal/proxy"
 	"gateway/internal/routes"
-	"gateway/internal/auth"
 
 	"github.com/gin-gonic/gin"
-	
 )
 
 func main() {
@@ -22,6 +21,11 @@ func main() {
 	notificationProxy, _ := proxy.CreateProxy(cfg.NotificationServiceURL)
 
 	jwtManager := auth.NewJWTManager(cfg.JWTSecret)
+
+	// simple health check
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
 
 	routes.Register(r, jwtManager, userProxy, broadcastProxy, commentProxy, notificationProxy)
 

@@ -16,7 +16,7 @@ func RunWorker(ctx context.Context, bc cache.BroadcastCache) {
 	}
 	topic := os.Getenv("KAFKA_TOPIC")
 	if topic == "" {
-		topic = "broadcast-status"
+		topic = "broadcast.started"
 	}
 	group := os.Getenv("KAFKA_GROUP")
 	if group == "" {
